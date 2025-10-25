@@ -1,0 +1,17 @@
+commit ad3572d450e3926d275c243d107b788f93549ee1
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Fri Oct 24 23:59:45 2025 -0400
+
+    this is as much as I have done before the deadline. I plan on finishing it, but I want to submit what I have the initialization and command parsing works, and updating the board almost works
+
+commit 526ae75e2a1a60913958797057d3a4cbd4ad506f
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Fri Oct 24 05:50:31 2025 -0400
+
+    created command line parsing and started initialization
+
+commit d687fefc619701dfa4fa82beb0d4fab1fcdb5de9
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Thu Oct 23 11:14:38 2025 -0400
+
+    Initial Commit
