@@ -5,12 +5,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "display.h"
+
 #define EMPTY ' '
 #define TREE 'Y'
-#define BURNING_1 '*'
-#define BURNING_2 '*'
-#define BURNING_3 '*'
-#define BURNING_4 '*'
+#define BURNING_1 '1'
+#define BURNING_2 '2'
+#define BURNING_3 '3'
 #define BURNED '.'
 
 static int start_burn_prop = 10;
@@ -19,6 +20,7 @@ static int tree_dense = 50;
 static int neigbor_prop = 25;
 static int print_cycles = 0;
 static int grid_size = 10;
+static int burned_trees = 0;
 
 static void usage() {
   fprintf(stderr, "\nusage: start a wildfire simulation [-H -bNUM -cNUM -dNUM "
@@ -98,8 +100,7 @@ int update_grid(int **in_grid) {
         if (row - 1 >= 0 && col - 1 >= 0) {
           if ((temp_grid[row - 1][col - 1] == BURNING_1 ||
                temp_grid[row - 1][col - 1] == BURNING_2 ||
-               temp_grid[row - 1][col - 1] == BURNING_3 ||
-               temp_grid[row - 1][col - 1] == BURNING_4)) {
+               temp_grid[row - 1][col - 1] == BURNING_3)) {
             buring_neighbors++;
           }
         }
@@ -107,9 +108,7 @@ int update_grid(int **in_grid) {
         if (row - 1 >= 0) {
           if ((temp_grid[row - 1][col] == BURNING_1 ||
                temp_grid[row - 1][col] == BURNING_2 ||
-               temp_grid[row - 1][col] == BURNING_3 ||
-               temp_grid[row - 1][col] == BURNING_4) &&
-              row - 1 >= 0) {
+               temp_grid[row - 1][col] == BURNING_3)) {
             buring_neighbors++;
           }
         }
@@ -117,8 +116,7 @@ int update_grid(int **in_grid) {
         if (row - 1 >= 0 && col + 1 < grid_size) {
           if ((temp_grid[row - 1][col + 1] == BURNING_1 ||
                temp_grid[row - 1][col + 1] == BURNING_2 ||
-               temp_grid[row - 1][col + 1] == BURNING_3 ||
-               temp_grid[row - 1][col + 1] == BURNING_4)) {
+               temp_grid[row - 1][col + 1] == BURNING_3)) {
             buring_neighbors++;
           }
         }
@@ -126,8 +124,7 @@ int update_grid(int **in_grid) {
         if (col - 1 >= 0) {
           if ((temp_grid[row][col - 1] == BURNING_1 ||
                temp_grid[row][col - 1] == BURNING_2 ||
-               temp_grid[row][col - 1] == BURNING_3 ||
-               temp_grid[row][col - 1] == BURNING_4)) {
+               temp_grid[row][col - 1] == BURNING_3)) {
             buring_neighbors++;
           }
         }
@@ -135,8 +132,7 @@ int update_grid(int **in_grid) {
         if (col + 1 < grid_size) {
           if ((temp_grid[row][col + 1] == BURNING_1 ||
                temp_grid[row][col + 1] == BURNING_2 ||
-               temp_grid[row][col + 1] == BURNING_3 ||
-               temp_grid[row][col + 1] == BURNING_4)) {
+               temp_grid[row][col + 1] == BURNING_3)) {
             buring_neighbors++;
           }
         }
@@ -144,8 +140,7 @@ int update_grid(int **in_grid) {
         if (row + 1 < grid_size && col - 1 >= 0) {
           if ((temp_grid[row + 1][col - 1] == BURNING_1 ||
                temp_grid[row + 1][col - 1] == BURNING_2 ||
-               temp_grid[row + 1][col - 1] == BURNING_3 ||
-               temp_grid[row + 1][col - 1] == BURNING_4)) {
+               temp_grid[row + 1][col - 1] == BURNING_3)) {
             buring_neighbors++;
           }
         }
@@ -153,8 +148,7 @@ int update_grid(int **in_grid) {
         if (row + 1 < grid_size) {
           if ((temp_grid[row + 1][col] == BURNING_1 ||
                temp_grid[row + 1][col] == BURNING_2 ||
-               temp_grid[row + 1][col] == BURNING_3 ||
-               temp_grid[row + 1][col] == BURNING_4)) {
+               temp_grid[row + 1][col] == BURNING_3)) {
             buring_neighbors++;
           }
         }
@@ -162,8 +156,7 @@ int update_grid(int **in_grid) {
         if (row + 1 < grid_size && col + 1 < grid_size) {
           if ((temp_grid[row + 1][col + 1] == BURNING_1 ||
                temp_grid[row + 1][col + 1] == BURNING_2 ||
-               temp_grid[row + 1][col + 1] == BURNING_3 ||
-               temp_grid[row + 1][col + 1] == BURNING_4)) {
+               temp_grid[row + 1][col + 1] == BURNING_3)) {
             buring_neighbors++;
           }
         }
@@ -178,9 +171,8 @@ int update_grid(int **in_grid) {
       } else if (temp_grid[row][col] == BURNING_2) {
         in_grid[row][col] = BURNING_3;
       } else if (temp_grid[row][col] == BURNING_3) {
-        in_grid[row][col] = BURNING_4;
-      } else if (temp_grid[row][col] == BURNING_4) {
         in_grid[row][col] = BURNED;
+        burned_trees++;
         state_updates++;
       }
     }
@@ -195,16 +187,29 @@ int update_grid(int **in_grid) {
   return state_updates;
 }
 
+void grid_print(int **grid, int cycle, int tot_changes, int cur_changes) {
+  for (int row = 0; row < grid_size; row++) {
+    for (int col = 0; col < grid_size; col++) {
+      if (grid[row][col] == BURNING_1 || grid[row][col] == BURNING_2 ||
+          grid[row][col] == BURNING_3) {
+        printf("*");
+      } else {
+        printf("%c", grid[row][col]);
+      }
+    }
+    printf("\n");
+  }
+  printf("size: %d, pCatch: %f, Density: %f, pBurning: %f, pNeighbor: %f\n"
+         "cycle %d, current changes: %d, cumulative changes %d\n",
+         grid_size, (float)burn_prob / 100, (float)tree_dense / 100,
+         (float)start_burn_prop / 100, (float)neigbor_prop / 100, cycle,
+         cur_changes, tot_changes);
+}
+
 int main(int argc, char *argv[]) {
 
   int opt;
   int recieved = 0;
-
-  fprintf(stderr, "command line:\t >>> ");
-  for (int j = 0; j < argc; ++j) {
-    fprintf(stderr, "%s ", argv[j]);
-  }
-  fprintf(stderr, "\n");
 
   while ((opt = getopt(argc, argv, "Hb:c:d:n:s:p:")) != -1) {
     switch (opt) {
@@ -272,19 +277,20 @@ int main(int argc, char *argv[]) {
   }
 
   int **grid = initialize_grid();
-  for (int row = 0; row < grid_size; row++) {
-    for (int col = 0; col < grid_size; col++) {
-      printf("%c", grid[row][col]);
+  int tot_changes = 0;
+  int cur_changes = 0;
+  if (print_cycles) {
+    for (int i = 0; i < print_cycles; i++) {
+      printf("===========================\n"
+             "======== Wildfire =========\n"
+             "===========================\n"
+             "=== Print %02d Time Steps ===\n"
+             "===========================\n",
+             i + 1);
+      grid_print(grid, i + 1, tot_changes, cur_changes);
+      cur_changes = update_grid(grid);
+      tot_changes += cur_changes;
     }
-    printf("\n");
-  }
-  printf("%d\n", update_grid(grid));
-  printf("-----------------------\n");
-  for (int row = 0; row < grid_size; row++) {
-    for (int col = 0; col < grid_size; col++) {
-      printf("%c", grid[row][col]);
-    }
-    printf("\n");
   }
   return EXIT_SUCCESS;
 }

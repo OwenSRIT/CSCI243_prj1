@@ -1,3 +1,9 @@
+commit 217c30ded97c3d1bdb2459ebd7b3cba3b262c11e
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Sat Oct 25 00:15:35 2025 -0400
+
+    got display updates to work and changed log.txt to revisions.txt
+
 commit cf3c0f45c5aec893d9bfc0f6386e3dde7e61f43b
 Author: ocs8488 <ocs8488@rit.edu>
 Date:   Sat Oct 25 00:00:10 2025 -0400
