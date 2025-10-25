@@ -23,18 +23,20 @@ static int grid_size = 10;
 static int burned_trees = 0;
 
 static void usage() {
-  fprintf(stderr, "\nusage: start a wildfire simulation [-H -bNUM -cNUM -dNUM "
-                  "-nNUM -sNUM -pNUM]\n");
-  fprintf(stderr, "\t-H is for getting help\n");
   fprintf(stderr,
-          "\t-bN sets the proportion of trees that are buning at the start\n");
-  fprintf(stderr, "\t-cN sets the probability of a tree catching fire\n");
-  fprintf(stderr, "\t-dN sets the density of trees at the start\n");
-  fprintf(stderr, "\t-nN sets the percentage of neighbors that need to be on "
-                  "fire for a tree to catch fire\n");
-  fprintf(stderr, "\t-sN sets the size of the grid\n");
-  fprintf(stderr, "\t-pN sets the program to print mode and will print N "
-                  "cycles of the simulation\n");
+          "usage: wildfire [options]\n"
+          "By default, the simulation runs in overlay display mode.\n"
+          "The -pN option makes the simulation run in print mode for up to N "
+          "states.\n\n"
+          "Simulation Configuration Options:\n"
+          "\t-H  # View simulation options and quit.\n"
+          "\t-bN # proportion of trees that are already burning. 0 < N < 101.\n"
+          "\t-cN # probability that a tree will catch fire. 0 < N < 101.\n"
+          "\t-dN # density: the proportion of trees in the grid. 0 < N < 101.\n"
+          "\t-nN # proportion of neighbors that influence a tree catching "
+          "fire. -1 < N < 101.\n"
+          "\t-pN # number of states to print before quitting. -1 < N < ...\n"
+          "\t-sN # simulation grid size. 4 < N < 41.\n");
 }
 
 static int **initialize_grid() {
@@ -199,11 +201,12 @@ void grid_print(int **grid, int cycle, int tot_changes, int cur_changes) {
     }
     printf("\n");
   }
-  printf("size: %d, pCatch: %f, Density: %f, pBurning: %f, pNeighbor: %f\n"
-         "cycle %d, current changes: %d, cumulative changes %d\n",
-         grid_size, (float)burn_prob / 100, (float)tree_dense / 100,
-         (float)start_burn_prop / 100, (float)neigbor_prop / 100, cycle,
-         cur_changes, tot_changes);
+  printf(
+      "size: %d, pCatch: %.2f, Density: %.2f, pBurning: %.2f, pNeighbor: %.2f\n"
+      "cycle %d, current changes: %d, cumulative changes %d.\n",
+      grid_size, (float)burn_prob / 100, (float)tree_dense / 100,
+      (float)start_burn_prop / 100, (float)neigbor_prop / 100, cycle,
+      cur_changes, tot_changes);
 }
 
 int main(int argc, char *argv[]) {
@@ -215,6 +218,7 @@ int main(int argc, char *argv[]) {
     switch (opt) {
     case 'H':
       usage();
+      return EXIT_FAILURE;
       break;
 
     case 'b':
@@ -223,6 +227,7 @@ int main(int argc, char *argv[]) {
         start_burn_prop = recieved;
       } else {
         fprintf(stderr, "Please enter a proportion between 1 and 100.\n");
+        return EXIT_FAILURE;
       }
       break;
 
@@ -232,6 +237,7 @@ int main(int argc, char *argv[]) {
         burn_prob = recieved;
       } else {
         fprintf(stderr, "Please enter a probability between 1 and 100.\n");
+        return EXIT_FAILURE;
       }
       break;
 
@@ -241,6 +247,7 @@ int main(int argc, char *argv[]) {
         tree_dense = recieved;
       } else {
         fprintf(stderr, "Please enter a percentage between 1 and 100.\n");
+        return EXIT_FAILURE;
       }
       break;
 
@@ -250,6 +257,7 @@ int main(int argc, char *argv[]) {
         neigbor_prop = recieved;
       } else {
         fprintf(stderr, "Please enter a percentage between 1 and 100.\n");
+        return EXIT_FAILURE;
       }
       break;
 
@@ -259,6 +267,7 @@ int main(int argc, char *argv[]) {
         print_cycles = recieved;
       } else {
         fprintf(stderr, "Please enter a non negative number of cycles\n");
+        return EXIT_FAILURE;
       }
       break;
 
@@ -268,6 +277,7 @@ int main(int argc, char *argv[]) {
         grid_size = recieved;
       } else {
         fprintf(stderr, "Please enter a size between 5 and 40.\n");
+        return EXIT_FAILURE;
       }
       break;
 

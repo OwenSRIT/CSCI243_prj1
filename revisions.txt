@@ -1,3 +1,15 @@
+commit e23c8708c1e8719a87e8c0d75a28465420895bd5
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Sat Oct 25 04:52:32 2025 -0400
+
+    semantic changes
+
+commit 42e0d40b2a590deaba0010ca7a638a52cd5333bc
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Sat Oct 25 04:44:56 2025 -0400
+
+    got printing to work
+
 commit 217c30ded97c3d1bdb2459ebd7b3cba3b262c11e
 Author: ocs8488 <ocs8488@rit.edu>
 Date:   Sat Oct 25 00:15:35 2025 -0400
