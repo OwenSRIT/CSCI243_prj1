@@ -37,7 +37,7 @@ static void usage() {
           "\t-nN # proportion of neighbors that influence a tree catching "
           "fire. -1 < N < 101.\n"
           "\t-pN # number of states to print before quitting. -1 < N < ...\n"
-          "\t-sN # simulation grid size. 4 < N < 41.\n");
+          "\t-sN # simulation grid size. 4 < N < 41.");
 }
 
 static int **initialize_grid() {
@@ -180,7 +180,6 @@ int update_grid(int **in_grid) {
         burning_trees--;
         state_updates++;
       }
-      fprintf(stderr, "%d", burning_trees);
     }
   }
 
@@ -205,7 +204,7 @@ void grid_print(int **grid, int cycle, int tot_changes, int cur_changes) {
     }
     printf("\n");
   }
-  printf("size %d, pCatch %.2f, Density %.2f, pBurning %.2f, pNeighbor %.2f\n"
+  printf("size %d, pCatch %.2f, density %.2f, pBurning %.2f, pNeighbor %.2f\n"
          "cycle %d, current changes %d, cumulative changes %d.\n",
          grid_size, (float)burn_prob / 100, (float)tree_dense / 100,
          (float)start_burn_prop / 100, (float)neigbor_prop / 100, cycle,
