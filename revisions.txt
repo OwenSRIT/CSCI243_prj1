@@ -1,3 +1,9 @@
+commit cf3c0f45c5aec893d9bfc0f6386e3dde7e61f43b
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Sat Oct 25 00:00:10 2025 -0400
+
+    adding log
+
 commit ad3572d450e3926d275c243d107b788f93549ee1
 Author: ocs8488 <ocs8488@rit.edu>
 Date:   Fri Oct 24 23:59:45 2025 -0400

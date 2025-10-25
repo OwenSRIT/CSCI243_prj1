@@ -92,8 +92,8 @@ int update_grid(int **in_grid) {
 
   for (int row = 0; row < grid_size; row++) {
     for (int col = 0; col < grid_size; col++) {
+      float buring_neighbors = 0;
       if (temp_grid[row][col] == TREE) {
-        int buring_neighbors = 0;
         // northwest
         if (row - 1 >= 0 && col - 1 >= 0) {
           if ((temp_grid[row - 1][col - 1] == BURNING_1 ||
@@ -167,8 +167,8 @@ int update_grid(int **in_grid) {
             buring_neighbors++;
           }
         }
-
-        if (buring_neighbors / 8 >= neigbor_prop && rand() % 100 >= burn_prob) {
+        if ((buring_neighbors / 8) * 100 >= neigbor_prop &&
+            rand() % 100 <= burn_prob) {
           in_grid[row][col] = BURNING_1;
           state_updates++;
         }
