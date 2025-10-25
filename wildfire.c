@@ -20,7 +20,8 @@ static int tree_dense = 50;
 static int neigbor_prop = 25;
 static int print_cycles = 0;
 static int grid_size = 10;
-static int burned_trees = 0;
+static int burning_trees = 0;
+static int print_fires_out = 0;
 
 static void usage() {
   fprintf(stderr,
@@ -64,6 +65,7 @@ static int **initialize_grid() {
       if (burn_count < (start_burn_prop / 100.00) * trees) {
         grid[row][col] = BURNING_1;
         burn_count++;
+        burning_trees++;
       }
     }
   }
@@ -166,6 +168,7 @@ int update_grid(int **in_grid) {
             rand() % 100 <= burn_prob) {
           in_grid[row][col] = BURNING_1;
           state_updates++;
+          burning_trees++;
         }
 
       } else if (temp_grid[row][col] == BURNING_1) {
@@ -174,9 +177,10 @@ int update_grid(int **in_grid) {
         in_grid[row][col] = BURNING_3;
       } else if (temp_grid[row][col] == BURNING_3) {
         in_grid[row][col] = BURNED;
-        burned_trees++;
+        burning_trees--;
         state_updates++;
       }
+      fprintf(stderr, "%d", burning_trees);
     }
   }
 
@@ -201,12 +205,18 @@ void grid_print(int **grid, int cycle, int tot_changes, int cur_changes) {
     }
     printf("\n");
   }
-  printf(
-      "size: %d, pCatch: %.2f, Density: %.2f, pBurning: %.2f, pNeighbor: %.2f\n"
-      "cycle %d, current changes: %d, cumulative changes %d.\n",
-      grid_size, (float)burn_prob / 100, (float)tree_dense / 100,
-      (float)start_burn_prop / 100, (float)neigbor_prop / 100, cycle,
-      cur_changes, tot_changes);
+  printf("size %d, pCatch %.2f, Density %.2f, pBurning %.2f, pNeighbor %.2f\n"
+         "cycle %d, current changes %d, cumulative changes %d.\n",
+         grid_size, (float)burn_prob / 100, (float)tree_dense / 100,
+         (float)start_burn_prop / 100, (float)neigbor_prop / 100, cycle,
+         cur_changes, tot_changes);
+  if (burning_trees <= 0 && print_fires_out == 0) {
+    print_fires_out = 1;
+  }
+  if (print_fires_out == 1) {
+    printf("Fires are out.\n");
+    print_fires_out = -1;
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -226,7 +236,9 @@ int main(int argc, char *argv[]) {
       if (recieved > 0 && recieved <= 100) {
         start_burn_prop = recieved;
       } else {
-        fprintf(stderr, "Please enter a proportion between 1 and 100.\n");
+        fprintf(stderr, "(-bN) proportion already burning must be an integer "
+                        "in [1...100].\n");
+        usage();
         return EXIT_FAILURE;
       }
       break;
@@ -236,7 +248,9 @@ int main(int argc, char *argv[]) {
       if (recieved > 0 && recieved <= 100) {
         burn_prob = recieved;
       } else {
-        fprintf(stderr, "Please enter a probability between 1 and 100.\n");
+        fprintf(stderr, "probability a tree will catch fire must be an integer "
+                        "in [1...100].\n");
+        usage();
         return EXIT_FAILURE;
       }
       break;
@@ -246,7 +260,9 @@ int main(int argc, char *argv[]) {
       if (recieved > 0 && recieved <= 100) {
         tree_dense = recieved;
       } else {
-        fprintf(stderr, "Please enter a percentage between 1 and 100.\n");
+        fprintf(stderr, "(-dN) density of trees in the grid must be an integer "
+                        "in [1...100].\n");
+        usage();
         return EXIT_FAILURE;
       }
       break;
@@ -256,7 +272,9 @@ int main(int argc, char *argv[]) {
       if (recieved > 0 && recieved <= 100) {
         neigbor_prop = recieved;
       } else {
-        fprintf(stderr, "Please enter a percentage between 1 and 100.\n");
+        fprintf(stderr, "(-nN) neighbors influence catching fire must be an "
+                        "integer in [0...100].\n");
+        usage();
         return EXIT_FAILURE;
       }
       break;
@@ -266,7 +284,9 @@ int main(int argc, char *argv[]) {
       if (recieved >= 0) {
         print_cycles = recieved;
       } else {
-        fprintf(stderr, "Please enter a non negative number of cycles\n");
+        fprintf(stderr, "(-pN) number of states to print must be an integer in "
+                        "[0...10000].\n");
+        usage();
         return EXIT_FAILURE;
       }
       break;
@@ -276,7 +296,9 @@ int main(int argc, char *argv[]) {
       if (recieved > 4 && recieved <= 40) {
         grid_size = recieved;
       } else {
-        fprintf(stderr, "Please enter a size between 5 and 40.\n");
+        fprintf(stderr,
+                "(-sN) simulation grid size must be an integer in [5...40].\n");
+        usage();
         return EXIT_FAILURE;
       }
       break;
@@ -290,13 +312,13 @@ int main(int argc, char *argv[]) {
   int tot_changes = 0;
   int cur_changes = 0;
   if (print_cycles >= 0) {
+    printf("===========================\n"
+           "======== Wildfire =========\n"
+           "===========================\n"
+           "=== Print  %d Time Steps ===\n"
+           "===========================\n",
+           print_cycles);
     for (int i = 0; i <= print_cycles; i++) {
-      printf("===========================\n"
-             "======== Wildfire =========\n"
-             "===========================\n"
-             "=== Print  %d Time Steps ===\n"
-             "===========================\n",
-             i);
       grid_print(grid, i, tot_changes, cur_changes);
       cur_changes = update_grid(grid);
       tot_changes += cur_changes;

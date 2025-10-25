@@ -1,3 +1,9 @@
+commit b3e8368b55bdbc1372f3d5ed4f89385496c0b3ba
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Sat Oct 25 05:12:55 2025 -0400
+
+    editing help messages
+
 commit e23c8708c1e8719a87e8c0d75a28465420895bd5
 Author: ocs8488 <ocs8488@rit.edu>
 Date:   Sat Oct 25 04:52:32 2025 -0400
