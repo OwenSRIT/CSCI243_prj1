@@ -1,37 +1,42 @@
 ============================= ASSIGNMENT REPORT ============================
 Assignment name is: Wildfire
-My name is:         <<<ENTER YOUR FULL NAME>>>
+My name is:                      Owen Stier
 
 	[USE PLAIN TEXT]
 	[INSERT ANSWERS AFTER EACH QUESTION AND ADD MORE LINES AS NEEDED.]
 	[MAKE YOUR ANSWERS SHORT AND TO THE POINT. BULLET POINTS ARE GOOD.]
 
 ===== In what cases does the program run correctly?  =================
-
+The program runs correctly as long as you give arguments within the bounds 
+specified by the help text
 
 ===== In what cases does the program fail and how?  ==================
-
+The program runs incorrectly if argumnts outside the bounds specified
+by the help text are given.
 
 ===== If applicable, what were the extra credit results?  ============
 ===== If applicable, describe how to run the extra credit.  ==========
 
 
 ===== How much time did I spend on the project?  =====================
-
+~8 hours
 
 ===== What did I learn?  =============================================
-
+I learned that you can split up strings in a single print statement, I 
+learned how to use a double pointer to make a 2D array, and I learned
+about clearing the command line and moving the cursor.
 
 ===== What was easy in this assignment?  =============================
-
+getting the command line arguments was easy.
 
 ===== What gave me problems or troubles?  ============================
-
+I had trouble with some of the logic of updating the simulation, but 
+there wasn't anything that took a long time to figure out.
 
 ===== What would be the most important improvement for the project?  =
-
+Making the autograding less strict on outputs would be nice.
 
 ===== What else would I have liked to do for this assignment?  =======
-
+I think this assignment has the right amount of content.
 
 ============================================================================

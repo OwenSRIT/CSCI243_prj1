@@ -1,3 +1,15 @@
+commit d4b2541d4142d5839fe73754be5022840b3bfc3b
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Sat Oct 25 05:54:27 2025 -0400
+
+    removed debug print, made semantic changes
+
+commit 0c9f68d99b1c46eec7281f51f64693f6e1f866d0
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Sat Oct 25 05:49:38 2025 -0400
+
+    fixed printing output
+
 commit b3e8368b55bdbc1372f3d5ed4f89385496c0b3ba
 Author: ocs8488 <ocs8488@rit.edu>
 Date:   Sat Oct 25 05:12:55 2025 -0400
