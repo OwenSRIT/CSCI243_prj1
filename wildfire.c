@@ -7,14 +7,17 @@
 
 #define EMPTY ' '
 #define TREE 'Y'
-#define BURNING '*'
+#define BURNING_1 '*'
+#define BURNING_2 '*'
+#define BURNING_3 '*'
+#define BURNING_4 '*'
 #define BURNED '.'
 
 static int start_burn_prop = 10;
 static int burn_prob = 30;
 static int tree_dense = 50;
 static int neigbor_prop = 25;
-static int print_cycles;
+static int print_cycles = 0;
 static int grid_size = 10;
 
 static void usage() {
@@ -32,29 +35,35 @@ static void usage() {
                   "cycles of the simulation\n");
 }
 
-static char ***initialize_grid() {
-
-  fprintf(stderr, "1\n");
+static int **initialize_grid() {
+  float grid_area = grid_size * grid_size;
   srand(41);
-  char **grid = malloc(sizeof(int[grid_size][grid_size]));
+  int **grid = malloc(sizeof(int[grid_size][grid_size]));
   for (int i = 0; i < grid_size; i++) {
-    grid[i] = malloc(grid_size);
+    grid[i] = malloc(sizeof(int[grid_size]));
   }
-  int tree_count = 0;
-  int burn_count = 0;
+  for (int row = 0; row < grid_size; row++) {
+    for (int col = 0; col < grid_size; col++) {
+      grid[row][col] = ' ';
+    }
+  }
+  float trees = ((tree_dense / 100.00) * grid_area);
+
+  float tree_count = 0;
+  float burn_count = 0;
   for (int row = 0; row < grid_size; row++) {
     for (int col = 0; col < grid_size; col++) {
       if ((tree_count / (grid_size * grid_size)) * 100 < tree_dense) {
         grid[row][col] = TREE;
         tree_count++;
       }
-      if ((burn_count / (grid_size * grid_size)) * 100 < start_burn_prop) {
-        grid[row][col] = BURNING;
+      if (burn_count < (start_burn_prop / 100.00) * trees) {
+        grid[row][col] = BURNING_1;
         burn_count++;
       }
     }
   }
-  char temp_symbol;
+  int temp_symbol;
   for (int row = 0; row < grid_size; row++) {
     for (int col = 0; col < grid_size; col++) {
       temp_symbol = grid[row][col];
@@ -66,10 +75,124 @@ static char ***initialize_grid() {
       grid[rand_row][rand_col] = temp_symbol;
     }
   }
+  return grid;
+}
 
-  char ***grid_ptr = &grid;
+int update_grid(int **in_grid) {
+  int state_updates = 0;
+  int **temp_grid = malloc(sizeof(int[grid_size][grid_size]));
+  for (int i = 0; i < grid_size; i++) {
+    temp_grid[i] = malloc(sizeof(int[grid_size]));
+  }
+  for (int row = 0; row < grid_size; row++) {
+    for (int col = 0; col < grid_size; col++) {
+      temp_grid[row][col] = in_grid[row][col];
+    }
+  }
 
-  return grid_ptr;
+  for (int row = 0; row < grid_size; row++) {
+    for (int col = 0; col < grid_size; col++) {
+      if (temp_grid[row][col] == TREE) {
+        int buring_neighbors = 0;
+        // northwest
+        if (row - 1 >= 0 && col - 1 >= 0) {
+          if ((temp_grid[row - 1][col - 1] == BURNING_1 ||
+               temp_grid[row - 1][col - 1] == BURNING_2 ||
+               temp_grid[row - 1][col - 1] == BURNING_3 ||
+               temp_grid[row - 1][col - 1] == BURNING_4)) {
+            buring_neighbors++;
+          }
+        }
+        // north
+        if (row - 1 >= 0) {
+          if ((temp_grid[row - 1][col] == BURNING_1 ||
+               temp_grid[row - 1][col] == BURNING_2 ||
+               temp_grid[row - 1][col] == BURNING_3 ||
+               temp_grid[row - 1][col] == BURNING_4) &&
+              row - 1 >= 0) {
+            buring_neighbors++;
+          }
+        }
+        // northeast
+        if (row - 1 >= 0 && col + 1 < grid_size) {
+          if ((temp_grid[row - 1][col + 1] == BURNING_1 ||
+               temp_grid[row - 1][col + 1] == BURNING_2 ||
+               temp_grid[row - 1][col + 1] == BURNING_3 ||
+               temp_grid[row - 1][col + 1] == BURNING_4)) {
+            buring_neighbors++;
+          }
+        }
+        // west
+        if (col - 1 >= 0) {
+          if ((temp_grid[row][col - 1] == BURNING_1 ||
+               temp_grid[row][col - 1] == BURNING_2 ||
+               temp_grid[row][col - 1] == BURNING_3 ||
+               temp_grid[row][col - 1] == BURNING_4)) {
+            buring_neighbors++;
+          }
+        }
+        // east
+        if (col + 1 < grid_size) {
+          if ((temp_grid[row][col + 1] == BURNING_1 ||
+               temp_grid[row][col + 1] == BURNING_2 ||
+               temp_grid[row][col + 1] == BURNING_3 ||
+               temp_grid[row][col + 1] == BURNING_4)) {
+            buring_neighbors++;
+          }
+        }
+        // southwest
+        if (row + 1 < grid_size && col - 1 >= 0) {
+          if ((temp_grid[row + 1][col - 1] == BURNING_1 ||
+               temp_grid[row + 1][col - 1] == BURNING_2 ||
+               temp_grid[row + 1][col - 1] == BURNING_3 ||
+               temp_grid[row + 1][col - 1] == BURNING_4)) {
+            buring_neighbors++;
+          }
+        }
+        // south
+        if (row + 1 < grid_size) {
+          if ((temp_grid[row + 1][col] == BURNING_1 ||
+               temp_grid[row + 1][col] == BURNING_2 ||
+               temp_grid[row + 1][col] == BURNING_3 ||
+               temp_grid[row + 1][col] == BURNING_4)) {
+            buring_neighbors++;
+          }
+        }
+        // southeast
+        if (row + 1 < grid_size && col + 1 < grid_size) {
+          if ((temp_grid[row + 1][col + 1] == BURNING_1 ||
+               temp_grid[row + 1][col + 1] == BURNING_2 ||
+               temp_grid[row + 1][col + 1] == BURNING_3 ||
+               temp_grid[row + 1][col + 1] == BURNING_4)) {
+            buring_neighbors++;
+          }
+        }
+
+        if (buring_neighbors / 8 >= neigbor_prop && rand() % 100 >= burn_prob) {
+          in_grid[row][col] = BURNING_1;
+          state_updates++;
+        }
+
+      } else if (temp_grid[row][col] == BURNING_1) {
+        in_grid[row][col] = BURNING_2;
+      } else if (temp_grid[row][col] == BURNING_2) {
+        in_grid[row][col] = BURNING_3;
+      } else if (temp_grid[row][col] == BURNING_3) {
+        in_grid[row][col] = BURNING_4;
+      } else if (temp_grid[row][col] == BURNING_4) {
+        in_grid[row][col] = BURNED;
+        state_updates++;
+      }
+    }
+  }
+
+  for (int i = 0; i < grid_size; i++) {
+    free(temp_grid[i]);
+  }
+
+  free(temp_grid);
+
+  return state_updates;
 }
 
 int main(int argc, char *argv[]) {
@@ -147,10 +270,19 @@ int main(int argc, char *argv[]) {
       break;
     }
   }
-  char ***grid = initialize_grid();
+
+  int **grid = initialize_grid();
   for (int row = 0; row < grid_size; row++) {
     for (int col = 0; col < grid_size; col++) {
-      printf("%c", *grid[row][col]);
+      printf("%c", grid[row][col]);
+    }
+    printf("\n");
+  }
+  printf("%d\n", update_grid(grid));
+  printf("-----------------------\n");
+  for (int row = 0; row < grid_size; row++) {
+    for (int col = 0; col < grid_size; col++) {
+      printf("%c", grid[row][col]);
     }
     printf("\n");
   }
