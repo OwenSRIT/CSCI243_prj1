@@ -255,7 +255,7 @@ int main(int argc, char *argv[]) {
 
     case 'p':
       recieved = (int)strtol(optarg, NULL, 10);
-      if (recieved > 0) {
+      if (recieved >= 0) {
         print_cycles = recieved;
       } else {
         fprintf(stderr, "Please enter a non negative number of cycles\n");
@@ -279,15 +279,15 @@ int main(int argc, char *argv[]) {
   int **grid = initialize_grid();
   int tot_changes = 0;
   int cur_changes = 0;
-  if (print_cycles) {
-    for (int i = 0; i < print_cycles; i++) {
+  if (print_cycles >= 0) {
+    for (int i = 0; i <= print_cycles; i++) {
       printf("===========================\n"
              "======== Wildfire =========\n"
              "===========================\n"
-             "=== Print %02d Time Steps ===\n"
+             "=== Print  %d Time Steps ===\n"
              "===========================\n",
-             i + 1);
-      grid_print(grid, i + 1, tot_changes, cur_changes);
+             i);
+      grid_print(grid, i, tot_changes, cur_changes);
       cur_changes = update_grid(grid);
       tot_changes += cur_changes;
     }
