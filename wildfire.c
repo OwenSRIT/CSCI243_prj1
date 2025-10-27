@@ -1,9 +1,10 @@
-// #define _DEFAULT_SOURCE
+#define _DEFAULT_SOURCE
 
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "display.h"
 
@@ -218,6 +219,13 @@ void grid_print(int **grid, int cycle, int tot_changes, int cur_changes) {
   }
 }
 
+void delay(int seconds) {
+  clock_t start_time = clock();
+
+  while (clock() < start_time + CLOCKS_PER_SEC) {
+  }
+}
+
 int main(int argc, char *argv[]) {
 
   int opt;
@@ -268,7 +276,7 @@ int main(int argc, char *argv[]) {
 
     case 'n':
       recieved = (int)strtol(optarg, NULL, 10);
-      if (recieved > 0 && recieved <= 100) {
+      if (recieved >= 0 && recieved <= 100) {
         neigbor_prop = recieved;
       } else {
         fprintf(stderr, "(-nN) neighbors influence catching fire must be an "
@@ -310,7 +318,7 @@ int main(int argc, char *argv[]) {
   int **grid = initialize_grid();
   int tot_changes = 0;
   int cur_changes = 0;
-  if (print_cycles >= 0) {
+  if (print_cycles > 0) {
     printf("===========================\n"
            "======== Wildfire =========\n"
            "===========================\n"
@@ -321,6 +329,17 @@ int main(int argc, char *argv[]) {
       grid_print(grid, i, tot_changes, cur_changes);
       cur_changes = update_grid(grid);
       tot_changes += cur_changes;
+    }
+  } else {
+    int i = 0;
+    while (print_fires_out != -1) {
+      clear();
+      set_cur_pos(1, 0);
+      grid_print(grid, i, tot_changes, cur_changes);
+      cur_changes = update_grid(grid);
+      tot_changes += cur_changes;
+      i++;
+      delay(1);
     }
   }
   return EXIT_SUCCESS;
