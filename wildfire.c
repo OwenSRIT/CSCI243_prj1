@@ -19,7 +19,7 @@ static int start_burn_prop = 10;
 static int burn_prob = 30;
 static int tree_dense = 50;
 static int neigbor_prop = 25;
-static int print_cycles = 0;
+static int print_cycles = -1;
 static int grid_size = 10;
 static int burning_trees = 0;
 static int print_fires_out = 0;
@@ -319,7 +319,7 @@ int main(int argc, char *argv[]) {
   int **grid = initialize_grid();
   int tot_changes = 0;
   int cur_changes = 0;
-  if (print_cycles > 0) {
+  if (print_cycles >= 0) {
     printf("===========================\n"
            "======== Wildfire =========\n"
            "===========================\n"
