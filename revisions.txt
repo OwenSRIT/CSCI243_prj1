@@ -1,3 +1,15 @@
+commit c6d96854416af6fdb8854c47b146997f26de4ffe
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Sun Oct 26 23:27:16 2025 -0400
+
+    error message changes
+
+commit 5692ea4aec96f2b22675c47f37d3e7ba20f96950
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Sun Oct 26 23:21:16 2025 -0400
+
+    updated revisions
+
 commit 129d5c67c517bba1baaa11adac6dcbc21d18a3e4
 Author: ocs8488 <ocs8488@rit.edu>
 Date:   Sun Oct 26 23:20:07 2025 -0400

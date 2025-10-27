@@ -38,7 +38,7 @@ static void usage() {
           "\t-nN # proportion of neighbors that influence a tree catching "
           "fire. -1 < N < 101.\n"
           "\t-pN # number of states to print before quitting. -1 < N < ...\n"
-          "\t-sN # simulation grid size. 4 < N < 41.");
+          "\t-sN # simulation grid size. 4 < N < 41.\n\n");
 }
 
 static int **initialize_grid() {
@@ -222,7 +222,7 @@ void grid_print(int **grid, int cycle, int tot_changes, int cur_changes) {
 void delay(int seconds) {
   clock_t start_time = clock();
 
-  while (clock() < start_time + CLOCKS_PER_SEC) {
+  while (clock() < start_time + (CLOCKS_PER_SEC * seconds)) {
   }
 }
 
@@ -280,7 +280,7 @@ int main(int argc, char *argv[]) {
       if (recieved >= 0 && recieved <= 100) {
         neigbor_prop = recieved;
       } else {
-        fprintf(stderr, "(-nN) \%neighbors influence catching fire must be an "
+        fprintf(stderr, "(-nN) neighbors influence catching fire must be an "
                         "integer in [0...100].\n");
         usage();
         return EXIT_FAILURE;
@@ -330,6 +330,9 @@ int main(int argc, char *argv[]) {
       grid_print(grid, i, tot_changes, cur_changes);
       cur_changes = update_grid(grid);
       tot_changes += cur_changes;
+      if (print_fires_out == -1) {
+        break;
+      }
     }
   } else {
     int i = 0;
