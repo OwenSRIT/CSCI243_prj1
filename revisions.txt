@@ -1,3 +1,15 @@
+commit 129d5c67c517bba1baaa11adac6dcbc21d18a3e4
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Sun Oct 26 23:20:07 2025 -0400
+
+    implemented display mode using time.h instead of usleep() because I couldn't get it to work
+
+commit 82bca44e8c4506465e66cf4ac7f3a9c16418c025
+Author: ocs8488 <ocs8488@rit.edu>
+Date:   Sat Oct 25 06:04:46 2025 -0400
+
+    cleaned up files, updated revision.txt, wrote report.txt
+
 commit d4b2541d4142d5839fe73754be5022840b3bfc3b
 Author: ocs8488 <ocs8488@rit.edu>
 Date:   Sat Oct 25 05:54:27 2025 -0400
