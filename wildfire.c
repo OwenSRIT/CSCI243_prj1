@@ -255,8 +255,9 @@ int main(int argc, char *argv[]) {
       if (recieved > 0 && recieved <= 100) {
         burn_prob = recieved;
       } else {
-        fprintf(stderr, "probability a tree will catch fire must be an integer "
-                        "in [1...100].\n");
+        fprintf(stderr,
+                "(-cN) probability a tree will catch fire must be an integer "
+                "in [1...100].\n");
         usage();
         return EXIT_FAILURE;
       }
@@ -279,7 +280,7 @@ int main(int argc, char *argv[]) {
       if (recieved >= 0 && recieved <= 100) {
         neigbor_prop = recieved;
       } else {
-        fprintf(stderr, "(-nN) neighbors influence catching fire must be an "
+        fprintf(stderr, "(-nN) \%neighbors influence catching fire must be an "
                         "integer in [0...100].\n");
         usage();
         return EXIT_FAILURE;
